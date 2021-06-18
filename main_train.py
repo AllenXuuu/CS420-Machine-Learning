@@ -1,6 +1,7 @@
-from dataloader import get_dataloader
+from dataloader import build_dataloader
+from losses import build_loss
+from models import build_model
 from utils import parse_args, evaluate
-import importlib
 from tensorboardX import SummaryWriter
 import tqdm
 import torch
@@ -13,24 +14,19 @@ def main():
     args = parse_args()
     print(args)
 
-    trainLoader = get_dataloader('train', args.bz, args.noise_scale)
-    valLoader = get_dataloader('test', args.bz)
+    trainLoader = build_dataloader('train', args.bz)
+    valLoader = build_dataloader('test', args.bz)
 
     device = torch.device('cuda')
-    model = importlib.import_module('models.%s' % args.network).Network(args, 1, 2).to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
-    # loss_func = torch.nn.CrossEntropyLoss(torch.from_numpy(trainLoader.dataset.loss_weight).float().to(device))
-    loss_func = torch.nn.CrossEntropyLoss()
+    model = build_model(args, 1, 2).to(device)
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+    loss_func = build_loss(args.loss)
 
     ckpt_dir = os.path.join('./checkpoints', args.save_dir)
     os.makedirs(ckpt_dir, exist_ok=True)
 
     log_dir = os.path.join('./logs', args.save_dir)
     writer = SummaryWriter(log_dir)
-
-    # with open(os.path.join(ckpt_dir, 'report.txt'), 'a+') as f:
-    #     f.write('%s' % args)
-    #     f.write('\n')
 
     for epoch in range(1, args.epoch + 1):
         ######################################## Train
@@ -65,10 +61,6 @@ def main():
         for metric, score in train_result.items():
             writer.add_scalar('train/%s' % metric, score, epoch)
             train_report += ' %s %.4f |' % (metric, score)
-        # print(train_report)
-        # with open(os.path.join(ckpt_dir, 'report.txt'), 'a+') as f:
-        #     f.write(train_report)
-        #     f.write('\n')
 
         ######################################## Eval
         model.eval()
@@ -94,8 +86,6 @@ def main():
         val_label = torch.cat(val_label, 0).cpu().numpy()
         val_score = torch.cat(val_score, 0)
 
-        # val_score = torch.nn.functional.softmax(val_score, 1)[:, 1]
-        # val_pred = (val_score > threshold).float().cpu().numpy()
         val_pred = torch.argmax(val_score, 1).cpu().numpy()
         val_result = evaluate(val_pred, val_label)
 
@@ -104,9 +94,6 @@ def main():
             writer.add_scalar('val/%s' % metric, score, epoch)
             val_report += ' %s %.4f |' % (metric, score)
         print(val_report)
-        # with open(os.path.join(ckpt_dir, 'report.txt'), 'a+') as f:
-        #     f.write(val_report)
-        #     f.write('\n')
 
         ######################################## Save checkpoint
         if epoch % args.save_freq == 0:

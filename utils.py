@@ -8,9 +8,11 @@ def parse_args():
 
     parser.add_argument('--save_dir', required=True, type=str)
     parser.add_argument('--network', type=str, default='UNet')
-    parser.add_argument('--noise_scale', type=float, default=10)
+    parser.add_argument('--loss', type=str, default='CrossEntropy')
+
     parser.add_argument('--bz', default=4, type=int)
     parser.add_argument('--lr', default=1e-3, type=float)
+    parser.add_argument('--weight_decay', type=float, default=0)
     parser.add_argument('--epoch', default=100, type=int)
     parser.add_argument('--save_freq', default=10, type=int)
 

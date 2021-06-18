@@ -3,10 +3,10 @@ import torch.nn as nn
 from .UNet import UNetBlock
 
 
-class AttentionModule(nn.Module):
-    def __init__(self, in_channels, out_channels, activation='sigmoid'):
-        super(AttentionModule, self).__init__()
-        self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=1)
+class Attention(nn.Module):
+    def __init__(self, in_channels, activation='sigmoid'):
+        super(Attention, self).__init__()
+        self.conv = nn.Conv2d(in_channels, 1, kernel_size=1)
 
         self.activation = {
             'sigmoid': nn.Sigmoid,
@@ -44,10 +44,10 @@ class Network(nn.Module):
             nn.ConvTranspose2d(self.hidden_channles[1], self.hidden_channles[0], kernel_size=2, stride=2, padding=0),
         ])
         self.attentionList = nn.ModuleList([
-            AttentionModule(self.hidden_channles[3], self.hidden_channles[3]),
-            AttentionModule(self.hidden_channles[2], self.hidden_channles[2]),
-            AttentionModule(self.hidden_channles[1], self.hidden_channles[1]),
-            AttentionModule(self.hidden_channles[0], self.hidden_channles[0]),
+            Attention(self.hidden_channles[3]),
+            Attention(self.hidden_channles[2]),
+            Attention(self.hidden_channles[1]),
+            Attention(self.hidden_channles[0]),
         ])
 
         self.classifier = nn.Conv2d(self.hidden_channles[0], out_classes, kernel_size=1, stride=1)
