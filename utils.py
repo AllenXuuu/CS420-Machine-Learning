@@ -6,15 +6,17 @@ from collections import OrderedDict
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--save_dir', required=True, type=str)
+    parser.add_argument('--save_dir', default='default', type=str)
+    parser.add_argument('--pretrained', default=None, type=str)
+
     parser.add_argument('--network', type=str, default='UNet')
     parser.add_argument('--loss', type=str, default='CrossEntropy')
 
     parser.add_argument('--bz', default=4, type=int)
     parser.add_argument('--lr', default=1e-3, type=float)
     parser.add_argument('--weight_decay', type=float, default=0)
-    parser.add_argument('--epoch', default=100, type=int)
-    parser.add_argument('--save_freq', default=10, type=int)
+    parser.add_argument('--epoch', default=500, type=int)
+    parser.add_argument('--save_freq', default=50, type=int)
 
     return parser.parse_args()
 
