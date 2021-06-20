@@ -21,7 +21,7 @@ This is the final project for course CS420 Machine Learning
 ## Code Structure
 
 #### Data
-Put the dataset into ```./dataset``` folder, including  ```./dataset/train_img```,```./dataset/train_label```,```./dataset/test_img```,```./dataset/test_label```.
+Put the dataset into ```./dataset``` folder, including  ```./dataset/train_img```, ```./dataset/train_label```, ```./dataset/test_img```, ```./dataset/test_label```.
 
 Since the label of 0.png in the given test set is wrongly rotated, our code will automatically handle this error.
 
@@ -34,15 +34,16 @@ You can use ```--network``` parameter to specify network architecture. ```UNet, 
 
 ## Evaluate model
 
-The best model (Attention enhanced UNet) and the baseline are provided in [Jbox]()
+The best model (Attention enhanced UNet) and the baseline are provided in [Jbox](https://jbox.sjtu.edu.cn/l/81HdLs).
 
-You can downloaded the pre-trained model and run following command for evaluation.
+You can download the pre-trained model and run following command for evaluation.
 
 ```
-(Best)     python main_test.py --network AttentionUNet --pretrained [path-to-you-downloaded-model]
-(Baseline) python main_test.py --network UNet --pretrained [path-to-you-downloaded-model]
+(Best)     python main_test.py --network AttentionUNet --pretrained [path-to-downloaded-model]
+(Baseline) python main_test.py --network UNet --pretrained [path-to-downloaded-model]
 ```
 
+![Image](./Figs/curve.png)
 ## Reproduce the training
 
 If you want to train from scratch, please run following command.
@@ -55,6 +56,8 @@ python main_train.py --network AttentionUNetPlus --save_dir [SAVE_DIR] --bz 1
 ```
 
 Then the weight of trained model will be stored in ```./checkpoints/[SAVE_DIR]``` and tensorboard logs will be stored in ```./logs/[SAVE_DIR]```.
+
+We use CrossEntropy loss in default. You can use Dice loss by ```--loss Dice```.
 
 ## Reference
 
