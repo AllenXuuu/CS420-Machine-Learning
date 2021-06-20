@@ -50,8 +50,8 @@ If you want to train from scratch, please run following command.
 
 ```
 python main_train.py --network UNet --save_dir [SAVE_DIR]
-python main_train.py --network UNetPlus --save_dir [SAVE_DIR]
-python main_train.py --network AttentionUNet --save_dir [SAVE_DIR] --bz 1
+python main_train.py --network AttentionUNet --save_dir [SAVE_DIR]
+python main_train.py --network UNetPlus --save_dir [SAVE_DIR] --bz 1
 python main_train.py --network AttentionUNetPlus --save_dir [SAVE_DIR] --bz 1
 ```
 
