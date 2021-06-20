@@ -57,10 +57,8 @@ def main():
         train_label = torch.cat(train_label, 0).cpu().numpy()
         train_result = evaluate(train_pred, train_label)
 
-        train_report = 'Train | Epoch %d | Time %.2fs | loss %.4f |' % (epoch, time.time() - start_time, train_loss)
         for metric, score in train_result.items():
             writer.add_scalar('train/%s' % metric, score, epoch)
-            train_report += ' %s %.4f |' % (metric, score)
 
         ######################################## Eval
         model.eval()
