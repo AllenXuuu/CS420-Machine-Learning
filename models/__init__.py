@@ -13,3 +13,5 @@ def build_model(args, input_channel, n_class):
         return AttentionUNet(args, input_channel, n_class)
     elif args.network.lower() == 'attentionunetplus':
         return AttentionUNetPlus(args, input_channel, n_class)
+    else:
+        raise NotImplementedError

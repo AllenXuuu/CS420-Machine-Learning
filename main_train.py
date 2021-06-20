@@ -96,7 +96,7 @@ def main():
         print(val_report)
 
         ######################################## Save checkpoint
-        if val_result['Vinfo'] > 0.51:
+        if epoch % args.save_freq == 0:
             ckpt_path = os.path.join(ckpt_dir, 'epoch_%d.pth' % epoch)
             torch.save(model.state_dict(), ckpt_path)
             print('Save model into ==> %s' % ckpt_path)
